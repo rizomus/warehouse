@@ -11,3 +11,14 @@ row_names = [chr(i) for i in range(ord('A'), ord('W')+1)]
 
 rack_coordinates = [list(zip(X , [[y]*len(X) for y in Y][i])) for i in range(len(Y))]  # ПЕРЕПИСАТЬ ПРОЩЕ!!!
 rack_coordinates = np.array(rack_coordinates).reshape(44*16, 2)
+
+
+
+Xt = np.array([12, 36, 60, 84, 102, 120]) + 1                # координаты стеллажей для временного хранения
+Xt = [(x + 1.8, x + 3) for x in Xt]
+Xt = np.array(Xt).flatten()
+Yt = [3.75 + i * 0.8 for i in range(15)] + [100 - 3.75 - 1 - i * 0.8 for i in range(15)]
+Yt.sort()
+
+temp_rack_coordinates = [list(zip(Xt , [[y]*len(Xt) for y in Yt][i])) for i in range(len(Yt))]
+temp_rack_coordinates = np.array(temp_rack_coordinates).reshape(30*12, 2)
