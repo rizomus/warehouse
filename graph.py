@@ -54,9 +54,13 @@ class Graph():
         self.vertex_dict = vertex_dict
         self.edge_dict = {key: [] for key in vertex_dict.keys()}     # !!! выражение dict.fromkeys(vertex_dict.keys(), value=[]) создаёт словарь, все элементы которого ссылаются на один и тотже пустой список
 
-    def add_vertex(self, key, value=None):
-        assert not(key in vertex_dict.keys()), 'vertex key already exists' 
-        self.vertex_dict[key] = value
+    def add_vertex(self, vertex):
+        try:
+            key = vertex.name
+        except:
+            key = vertex
+        assert not(key in self.vertex_dict.keys()), f'vertex key {key} already exists' 
+        self.vertex_dict[key] = vertex
         self.edge_dict[key] = []            # element of dict is list of edges
 
     def add_edge(self, edge):
