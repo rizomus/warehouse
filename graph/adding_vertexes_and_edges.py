@@ -453,6 +453,18 @@ for y, alfa in points_y.items():
 prev_names = {}
 points_y = {61.2:'ST', 65.6:'UV', 70:'WX'}
 for y, alfa in points_y.items():
+    point_names = {38:f'{alfa}->', 60:f'<-{alfa}'}
+    for x in point_names:
+        pass_name = point_names[x]
+        vertex = Vertex(pass_name, x, y)
+        graph.add_vertex(vertex)
+        canvas = circle(x, y, 1, canvas, (0,0,255), 1)
+    if prev_names:
+        for u, v in zip(prev_names.values(), point_names.values()):
+            weight = y - prev_y
+            graph.add_edge_by_indice(u, v, weight)
+    prev_names = point_names.copy()
+    prev_y = y
   
   
  
