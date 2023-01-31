@@ -407,6 +407,11 @@ for x in points_x:
 
 points_x = np.arange(136,169,2)
 for x in points_x:
+    for y in [14, 18, 22]:
+        pass_name = f'take_over_D-{x, y}'
+        vertex = Vertex(pass_name, x, y)
+        graph.add_vertex(vertex)
+        canvas = circle(x, y, 1, canvas, (0,0,255), 1)
   
   
 points_y = {25.5:'a*' ,27:'a', 32.7:'b', 34.6:'c', 39:'de', 43.4:'fg', 47.8:'hi', 52.2:'jk', 
