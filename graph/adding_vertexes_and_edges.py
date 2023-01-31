@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 from google.colab.patches import cv2_imshow
 PIXELS_IN_METER = P = 10
+from graph import Vertex, Edge, Graph
 
 def square(x1, y1, x2, y2, canvas, color=(0,0,0), thickness=3, P=P):
     x1 = round(x1 * P)
