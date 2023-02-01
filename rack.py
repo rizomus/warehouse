@@ -108,8 +108,7 @@ class Rack():
 
 
     def __repr__(self):
-        a = {0: '\'', 1: ''}[self.od]
-        return f'Rack {self.r}{a}-{self.c} at ({self.x/PIXELS_IN_METER:.1f}, {self.y/PIXELS_IN_METER:.1f})'
+        return f'Rack {self.r}-{self.c}'
       
       
       
