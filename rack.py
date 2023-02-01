@@ -1,3 +1,5 @@
+import numpy as np
+
 class Product():
     def __init__(self, 	article, sell_by_date=None, vertex_index=None, place=None):
         self.article = article              
