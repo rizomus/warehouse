@@ -35,9 +35,9 @@ class Edge():                               # Ребро графа
         if u[:4] == 'temp':
             return 'o'
 
-        if u[:2] == v[:2]:
+        if u.x == v.x:
             return 'h'
-        elif u[-2] == v[-2]:
+        elif u.y == v.y:
             return 'v'
         else:
             return 'h'
