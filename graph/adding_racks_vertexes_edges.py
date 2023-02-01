@@ -1,8 +1,14 @@
+'''
+Filling rack's dataframe by Rack objects according to warehouse schema
+Create Graph object, filling Vertex and Edges dicts
+'''
+
 import numpy as np
 import cv2
 from google.colab.patches import cv2_imshow
 PIXELS_IN_METER = P = 10
 from graph import Vertex, Edge, Graph
+from rack import Rack, Pallet, Product, Temp_rack
 
 def square(x1, y1, x2, y2, canvas, color=(0,0,0), thickness=3, P=P):
     x1 = round(x1 * P)
@@ -54,16 +60,19 @@ canvas = square(52, 66, 58, 72, canvas=canvas, thickness=3)
 empty_canvas = canvas.copy()
 cv2_imshow(canvas)
 
+
 canvas = empty_canvas.copy()
 graph = Graph({})
-alfa = [chr(ord('a')+i) for i in range(20)]
+alfa = [chr(ord('a')+i) for i in range(19)]
 
 x1, y1 = 134, 24 + 4    
 row_len = 16                        # Зона А слева
 for p in range(row_len):
     x2 = x1 + 1
-    canvas = square(x1, y1, x2, y1 + 1, canvas, thickness=1)
-    name = f'{alfa[0]}-{p}'
+    canvas = square(x1, y1, x2, y1+1, canvas, thickness=1)
+    rack = Rack(x1, y1, r='a', c=p)
+    DF_RACK['a'][p] = rack
+    name = f'a-{p}'
     x = x1 + 0.5
     y = y1 - 1
     add_vertex_and_edge(name, x, y, p, 0, row_len, graph, right_pass=True)
@@ -78,12 +87,13 @@ for p in range(row_len):
     weight = 2                                  #
     graph.add_edge_by_indice(u, v, weight)      # наверх к проходу
     
-    canvas = square(x1, y1+2.8, x2, y1 + 2.8 + 1, canvas, thickness=1)
+    canvas = square(x1, y1+2.8, x2, y1+2.8+1, canvas, thickness=1)
+    rack = Rack(x1, y1+2.8, r='b', c=p)
+    DF_RACK[f'b'][p] = rack
     x = x1 + 0.5
     y = y1 + 2.8 + 2
-    name = f'{alfa[1]}-{p}'
+    name = f'b-{p}'
     add_vertex_and_edge(name, x, y, p, 0, row_len, graph, right_pass=True)
-
     x1 = x2
 
 
@@ -92,13 +102,17 @@ for row in range(1,6+1):
     x1 = 134
     for p in range(row_len):
         x2 = x1 + 1
-        canvas = square(x1, y1, x2, y1 + 1.2, canvas=canvas, thickness=1)
+        canvas = square(x1, y1, x2, y1+1.2, canvas=canvas, thickness=1)
+        rack = Rack(x1, y1, r=alfa[row*2], c=p)
+        DF_RACK[f'{alfa[row*2]}'][p] = rack
         x = x1 + 0.5
         y = y1 - 1
         name = f'{alfa[row*2]}-{p}'
         add_vertex_and_edge(name, x, y, p, 0, row_len, graph, right_pass=True)
        
-        canvas = square(x1, y1 + 1.2, x2, y1 + 2.4, canvas=canvas, thickness=1)
+        canvas = square(x1, y1+1.2, x2, y1+2.4, canvas=canvas, thickness=1)
+        rack = Rack(x1, y1+1.2, r=alfa[row*2+1], c=p)
+        DF_RACK[f'{alfa[row*2+1]}'][p] = rack
         x = x1 + 0.5
         y = y1 + 2.4 + 1
         name = f'{alfa[row*2+1]}-{p}'
@@ -119,14 +133,15 @@ for row in range(1,6+1):
 
 
 row_len = 26 + 16
-
 x1, y1 = 156, 24 + 4                            # Зона А справа
 for p in range(16, row_len):
     x2 = x1 + 1
-    canvas = square(x1, y1, x2, y1 + 1, canvas=canvas, thickness=1)
+    canvas = square(x1, y1, x2, y1+1, canvas=canvas, thickness=1)
+    rack = Rack(x1, y1, r='a', c=p)
+    DF_RACK['a'][p] = rack
     x = x1 + 0.5
     y = y1 - 1
-    name = f'{alfa[0]}-{p}'
+    name = f'a-{p}'
     add_vertex_and_edge(name, x, y, p, 16, row_len, graph, left_pass=True)
 
     pass_name = name[0] + '*-' + str(p) 
@@ -139,10 +154,12 @@ for p in range(16, row_len):
     weight = 2                                  #
     graph.add_edge_by_indice(u, v, weight)      # наверх к проходу
 
-    canvas = square(x1, y1 + 2.8, x2, y1 + 2.8 + 1, canvas=canvas, thickness=1)
+    canvas = square(x1, y1+2.8, x2, y1+2.8+1, canvas=canvas, thickness=1)
+    rack = Rack(x1, y1+2.8, r='b', c=p)
+    DF_RACK['b'][p] = rack
     x = x1 + 0.5
     y = y1 + 2.8 + 2
-    name = f'{alfa[1]}-{p}'
+    name = f'b-{p}'
     add_vertex_and_edge(name, x, y, p, 16, row_len, graph, left_pass=True)
     x1 = x2
 
@@ -151,17 +168,21 @@ for row in range(1,8+1):
     x1 = 156
     for p in range(16, row_len):
         x2 = x1 + 1
-        canvas = square(x1, y1, x2, y1 + 1.2, canvas=canvas, thickness=1)
+        canvas = square(x1, y1, x2, y1+1.2, canvas=canvas, thickness=1)
+        rack = Rack(x1, y1, r=alfa[row*2], c=p)
+        DF_RACK[alfa[row*2]][p] = rack
         x = x1 + 0.5
         y = y1 - 1
         name = f'{alfa[row*2]}-{p}'
         add_vertex_and_edge(name, x, y, p, 16, row_len, graph, left_pass=True)
 
-        canvas = square(x1, y1 + 1.2, x2, y1 + 2.4, canvas=canvas, thickness=1)
+        canvas = square(x1, y1+1.2, x2, y1+2.4, canvas=canvas, thickness=1)
         x = x1 + 0.5
         y = y1 + 2.4 + 1
         name = f'{alfa[row*2+1]}-{p}'
         add_vertex_and_edge(name, x, y, p, 16, row_len, graph, left_pass=True)
+        rack = Rack(x1, y1+1.2, r=name[0], c=p)
+        DF_RACK[name[0]][p] = rack
         x1 = x2
     y1 += 4.4
 
@@ -173,9 +194,12 @@ for p in range(16, row_len):
     y = y1 - 1.2
     name = f's-{p}'
     add_vertex_and_edge(name, x, y, p, 16, row_len, graph, left_pass=True)
+    rack = Rack(x1, y1, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
     x1 = x2
 
 
+    
 alfa = [chr(ord('A')+i) for i in range(24)]
 row_len = 41
 # canvas = empty_canvas.copy()
@@ -183,11 +207,13 @@ row_len = 41
 x1, y1 = 0, 12 + 4                            # Зона Б слева
 for p in range(row_len):
     x2 = x1 + 1
-    canvas = square(x1, y1, x2, y1 + 1, canvas=canvas, thickness=1)
+    canvas = square(x1, y1, x2, y1+1, canvas=canvas, thickness=1)
     x = x1 + 0.5
     y = y1 - 1
     name = f'A-{p}'
     add_vertex_and_edge(name, x, y, p, 0, row_len, graph, right_pass=True)
+    rack = Rack(x1, y1, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
 
     pass_name = name[0] + '*-' + str(p) 
     pass_y = y - 1.5
@@ -199,11 +225,13 @@ for p in range(row_len):
     weight = 1.5                                  #
     graph.add_edge_by_indice(u, v, weight)      # наверх к проходу
 
-    canvas = square(x1, y1 + 2.8, x2, y1 + 2.8 + 1, canvas=canvas, thickness=1)
+    canvas = square(x1, y1+2.8, x2, y1+2.8+1, canvas=canvas, thickness=1)
     x = x1 + 0.5
     y = y1 + 2.8 + 2
     name = f'B-{p}'
     add_vertex_and_edge(name, x, y, p, 0, row_len, graph, right_pass=True)
+    rack = Rack(x1, y1+2.8, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
 
     pass_name = name[0] + '*-' + str(p) 
     pass_y = y + 1.5
@@ -221,11 +249,13 @@ y1 = 24 + 3 - 3.2
 x1 = 0
 for p in range(row_len):
     x2 = x1 + 1
-    canvas = square(x1, y1, x2, y1 + 1, canvas=canvas, thickness=1)
+    canvas = square(x1, y1, x2, y1+1, canvas=canvas, thickness=1)
     x = x1 + 0.5
     y = y1 + 1 + 1.2
     name = f'C-{p}'
     add_vertex_and_edge(name, x, y, p, 0, row_len, graph, right_pass=True)
+    rack = Rack(x1, y1, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
     x1 = x2
 
 y1 = 24 + 3
@@ -236,18 +266,22 @@ for row in range(2,10+2):
             continue
 
         x2 = x1 + 1
-        canvas = square(x1, y1, x2, y1 + 1.2, canvas=canvas, thickness=1)
+        canvas = square(x1, y1, x2, y1+1.2, canvas=canvas, thickness=1)
         x = x1 + 0.5
         y = y1 - 1
         name = f'{alfa[row*2 - 1]}-{p}'
         add_vertex_and_edge(name, x, y, p, 0, row_len, graph, right_pass=True)
+        rack = Rack(x1, y1, r=name[0], c=p)
+        DF_RACK[name[0]][p] = rack
 
         if not(row+1 > 9 and p > 34):
-            canvas = square(x1, y1 + 1.2, x2, y1 + 2.4, canvas=canvas, thickness=1)
+            canvas = square(x1, y1+1.2, x2, y1+2.4, canvas=canvas, thickness=1)
             x = x1 + 0.5
             y = y1 + 2.4 + 1
             name = f'{alfa[row*2]}-{p}'
             add_vertex_and_edge(name, x, y, p, 0, row_len-6, graph, right_pass=True)
+            rack = Rack(x1, y1+1.2, r=name[0], c=p)
+            DF_RACK[name[0]][p] = rack
         x1 = x2
     y1 += 4.4
 
@@ -260,6 +294,8 @@ for p in range(row_len-6):
     y = y1 - 1
     name = f'X-{p}'
     add_vertex_and_edge(name, x, y, p, 0, row_len-6, graph, right_pass=True)
+    rack = Rack(x1, y1, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
     x1 = x2
 
 
@@ -273,6 +309,8 @@ for p in range(41, row_len):
     y = y1 - 1
     name = f'A-{p}'
     add_vertex_and_edge(name, x, y, p, offset, row_len, graph, left_pass=True, right_pass=True)
+    rack = Rack(x1, y1, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
 
     pass_name = name[0] + '*-' + str(p) 
     pass_y = y - 1.5
@@ -284,11 +322,13 @@ for p in range(41, row_len):
     weight = 1.5                                  #
     graph.add_edge_by_indice(u, v, weight)      # наверх к проходу
 
-    canvas = square(x1, y1 + 2.8, x2, y1 + 2.8 + 1, canvas=canvas, thickness=1)
+    canvas = square(x1, y1+2.8, x2, y1+2.8+1, canvas=canvas, thickness=1)
     x = x1 + 0.5
     y = y1 + 2.8 + 2
     name = f'B-{p}'
     add_vertex_and_edge(name, x, y, p, offset, row_len, graph, left_pass=True, right_pass=True)
+    rack = Rack(x1, y1+2.8, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
 
     pass_name = name[0] + '*-' + str(p) 
     pass_y = y + 1.5
@@ -306,11 +346,13 @@ y1 = 24 + 3 - 3.2
 x1 = 97 - 52
 for p in range(41, row_len):
     x2 = x1 + 1
-    canvas = square(x1, y1, x2, y1 + 1, canvas=canvas, thickness=1)
+    canvas = square(x1, y1, x2, y1+1, canvas=canvas, thickness=1)
     x = x1 + 0.5
     y = y1 + 1 + 1.2
     name = f'C-{p}'
     add_vertex_and_edge(name, x, y, p, offset, row_len, graph, right_pass=True)
+    rack = Rack(x1, y1, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
     x1 = x2
 
 
@@ -324,17 +366,21 @@ for row in range(2,10+2):
             continue
 
         x2 = x1 + 1
-        canvas = square(x1, y1, x2, y1 + 1.2, canvas=canvas, thickness=1)
+        canvas = square(x1, y1, x2, y1+1.2, canvas=canvas, thickness=1)
         x = x1 + 0.5
         y = y1 - 1
-        name = f'{alfa[row*2 - 1]}-{p}'
+        name = f'{alfa[row*2-1]}-{p}'
         add_vertex_and_edge(name, x, y, p, offset, row_len, graph, left_pass=True, right_pass=True)
+        rack = Rack(x1, y1, r=name[0], c=p)
+        DF_RACK[name[0]][p] = rack
        
-        canvas = square(x1, y1 + 1.2, x2, y1 + 2.4, canvas=canvas, thickness=1)
+        canvas = square(x1, y1+1.2, x2, y1+2.4, canvas=canvas, thickness=1)
         x = x1 + 0.5
         y = y1 + 2.4 + 1
         name = f'{alfa[row*2]}-{p}'
         add_vertex_and_edge(name, x, y, p, offset, row_len, graph, left_pass=True, right_pass=True)
+        rack = Rack(x1, y1+1.2, r=name[0], c=p)
+        DF_RACK[name[0]][p] = rack
 
         if row==8 and p < 41+20:
             pass_name = name[0] + '*-' + str(p)         
@@ -359,6 +405,8 @@ for p in range(41+20, 41+52+33):
     y = y1 - 1
     name = f'X-{p}'
     add_vertex_and_edge(name, x, y, p, offset, row_len, graph, left_pass=True, right_pass=True)
+    rack = Rack(x1, y1, r=name[0], c=p)
+    DF_RACK[name[0]][p] = rack
     x1 = x2
 
     
