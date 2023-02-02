@@ -24,7 +24,6 @@ class Edge():                               # Ребро графа
         self.v = v
         self.weight = weight
         self._weight = weight
-        self.orient = None
 
     def reversed(self):
         return Edge(self.v, self.u, self.weight)
@@ -35,8 +34,16 @@ class Edge():                               # Ребро графа
 
         if u[:4] == 'temp':
             return 'o'
+
+        if u[:2] == v[:2]:
+            return 'h'
+        elif u[-2] == v[-2]:
+            return 'v'
         else:
-            return self.orient
+            return 'h'
+
+    def restore_weight(self):
+        self.weight = self._weight
 
     def __lt__(self, other):
         return self.weight < other.weight
@@ -45,6 +52,7 @@ class Edge():                               # Ребро графа
         return f"Edge [{self.u} -> {self.v}] (w={self.weight})"
       
       
+    
 class Graph():
     def __init__(self, vertex_dict):
         self.vertex_dict = vertex_dict
