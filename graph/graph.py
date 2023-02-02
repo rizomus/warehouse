@@ -50,22 +50,35 @@ class Graph():
         self.vertex_dict = vertex_dict
         self.edge_dict = {key: [] for key in vertex_dict.keys()}     # !!! выражение dict.fromkeys(vertex_dict.keys(), value=[]) создаёт словарь, все элементы которого ссылаются на один и тотже пустой список
 
-    def add_vertex(self, vertex):
-        try:
-            key = vertex.name
-        except:
-            key = vertex
-        assert not(key in self.vertex_dict.keys()), f'vertex key {key} already exists' 
-        self.vertex_dict[key] = vertex
+
+    def add_vertex(self, key, value=None):
+        assert not(key in vertex_dict.keys()), 'vertex key already exists' 
+        self.vertex_dict[key] = value
         self.edge_dict[key] = []            # element of dict is list of edges
 
+
     def add_edge(self, edge):
+        if not(edge.u in self.edge_dict.keys()):
+            self.edge_dict[edge.u] = []
+        if not(edge.v in self.edge_dict.keys()):
+            self.edge_dict[edge.v] = []
+
         self.edge_dict[edge.u].append(edge)
         self.edge_dict[edge.v].append(edge.reversed())
+
 
     def add_edge_by_indice(self, u, v, weight):
         edge = Edge(u, v, weight)
         self.add_edge(edge)
+
+
+    def get_edge_by_indice(self, u, v):
+        edge_list = self.edge_dict[u]
+        for e in edge_list:
+            if e.v == v:
+                return e
+        print(f'NO EDGE FIND for vertexes {u, v}')
+
 
     def neighbors_for_vertex(self, vertex_name):
         return self.edge_dict[vertex_name]
