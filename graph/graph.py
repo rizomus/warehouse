@@ -60,7 +60,7 @@ class Graph():
 
 
     def add_vertex(self, key, value=None):
-        assert not(key in vertex_dict.keys()), 'vertex key already exists' 
+        assert not(key in self.vertex_dict.keys()), 'vertex key already exists' 
         self.vertex_dict[key] = value
         self.edge_dict[key] = []            # element of dict is list of edges
 
