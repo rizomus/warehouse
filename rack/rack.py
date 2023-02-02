@@ -20,40 +20,37 @@ class Pallet():
     DF_PROD -       голобальная таблица со списком всех товаров
 
     '''
-    def __init__(self, 	products=[], rack=None, column=None, tier=None):
+    def __init__(self, 	products=[], rack=None, tier=None):
         self.products = products              
         self.rack = rack                  
-        self.column = column
         self.tier = tier
 
-        if rack and column and tier:
+        if rack and tier:
             self.on_rack = True
-            self.x = rack.x + 1.6 * self.column
+            self.x = rack.x
             self.y = rack.y 
         else:
             self.on_rack = False
 
             
-    def putting_to_rack(self, rack, column, tier):
+    def putting_to_rack(self, rack, tier):
             self.on_rack = True
             self.rack = rack
-            self.column = column
             self.tier = tier
-            self.x = rack.x + 1.6 * self.column
-            self.y = rack.y     
+            self.x = rack.x
+            self.y = rack.y
             for prod in self.products:
                 i = prod.index
                 r = rack.r
                 c = rack.c
-                vertex = f'{r}-{c}(p-{column})' 
-                DF_PROD.loc[i] = [prod, vertex, (column, tier), prod.sell_by_date]              # global dataframe
+                vertex = f'{r}-{c})' 
+                DF_PROD.loc[i] = [prod, vertex, (tier), prod.sell_by_date]              # global dataframe
 
                 
     def getting_from_rack(self):
-            vertex_index = f'{self.rack.r}-{self.rack.c}(p-{self.column})'
+            vertex_index = f'{self.rack.r}-{self.rack.c}'
             self.on_rack = False
             self.rack = None
-            self.column = None
             self.tier = None
             self.x = None
             self.y = None    
@@ -66,7 +63,7 @@ class Pallet():
 
                 
     def __repr__(self):
-        return f'[Pallet at ({self.column},{self.tier})]'
+        return f'[Pallet at ({self.tier})]'
       
       
       
@@ -86,24 +83,22 @@ class Rack():
         self.y = y
         self.r = r                          # избыточно?
         self.c = c                          # (по [r, c] можно получить индекс соответствующей вершины графа)
-        self.od = od
-        self.pallets = np.full((4, 5), fill_value=None)
+        self.pallets = np.full((5,), fill_value=None)
 
 
-    def put_pallet(self, pallet, column, tier):                     # type(pallete) == __main__.Pallet
-        assert column in [0,1,2,3], 'wrong column number'
+    def put_pallet(self, pallet, tier):                     # type(pallete) == __main__.Pallet
         assert tier in [0,1,2,3,4], 'wrong tier number'
-        assert not(self.pallets[column, tier]), 'the place is occupied'
+        assert not(self.pallets[tier]), 'the place is occupied'
         assert not(pallet.on_rack), 'pallet, you try to put, is already on rack'
-        pallet.putting_to_rack(self, column, tier)
-        self.pallets[column, tier] = pallet
+        pallet.putting_to_rack(self, tier)
+        self.pallets[tier] = pallet
 
 
-    def get_pallet(self, column, tier):
-        assert self.pallets[column, tier], 'no pallet'
-        pallet = self.pallets[column, tier]
+    def get_pallet(self, tier):
+        assert self.pallets[tier], 'no pallet'
+        pallet = self.pallets[tier]
         pallet.getting_from_rack()
-        self.pallets[column, tier] = None
+        self.pallets[tier] = None
         return pallet
 
 
@@ -114,8 +109,7 @@ class Rack():
       
       
 class Temp_rack():
-    def __init__(self, x, y, c, n):
-        self.column = c
+    def __init__(self, x, y, n):
         self.num = n
         self.pallet = None
 
