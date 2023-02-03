@@ -42,7 +42,7 @@ class Pallet():
                 i = prod.index
                 r = rack.r
                 c = rack.c
-                vertex = f'{r}-{c})' 
+                vertex = f'{r}-{c}' 
                 DF_PROD.loc[i] = [prod, vertex, (tier), prod.sell_by_date]
 
                 
