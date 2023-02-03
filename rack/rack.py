@@ -36,7 +36,7 @@ class Pallet():
             self.on_rack = False
 
             
-    def putting_to_rack(self, rack, tier):
+    def putting_to_rack(self, rack, tier, DF_PROD):
             self.on_rack = True
             self.rack = rack
             self.tier = tier
@@ -47,10 +47,10 @@ class Pallet():
                 r = rack.r
                 c = rack.c
                 vertex = f'{r}-{c})' 
-                DF_PROD.loc[i] = [prod, vertex, (tier), prod.sell_by_date]              # global dataframe
+                DF_PROD.loc[i] = [prod, vertex, (tier), prod.sell_by_date]
 
                 
-    def getting_from_rack(self):
+    def getting_from_rack(self, DF_PROD):
             vertex_index = f'{self.rack.r}-{self.rack.c}'
             self.on_rack = False
             self.rack = None
@@ -89,7 +89,7 @@ class Rack():
         self.pallets = np.full((5,), fill_value=None)
 
 
-    def put_pallet(self, pallet, tier):                     # type(pallete) == __main__.Pallet
+    def put_pallet(self, pallet, tier, DF_PROD):                     # type(pallete) == __main__.Pallet
         assert tier in [0,1,2,3,4], 'wrong tier number'
         assert not(self.pallets[tier]), 'the place is occupied'
         assert not(pallet.on_rack), 'pallet, you try to put, is already on rack'
@@ -97,7 +97,7 @@ class Rack():
         self.pallets[tier] = pallet
 
 
-    def get_pallet(self, tier):
+    def get_pallet(self, tier, DF_PROD):
         assert self.pallets[tier], 'no pallet'
         pallet = self.pallets[tier]
         pallet.getting_from_rack()
