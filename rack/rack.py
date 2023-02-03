@@ -1,5 +1,7 @@
 import numpy as np
-
+cols2 = ['Article', 'Vertex', 'Pallet_index', 'Sell_by_date']   # Products dataframe 
+DF_PROD = pd.DataFrame(columns=cols2) 
+    
 class Product():
     def __init__(self, 	article, sell_by_date=None, vertex_index=None, place=None):
         self.article = article              
@@ -14,7 +16,6 @@ class Pallet():
     '''
     products -      список товаров на паллете
     rack -          ссылка на стеллаж (class Rack)
-    column -        номер колонны на стеллжае (0-3)
     tier -          номер яруса (0-4)
     x, y -          абсолютные координаты палеты (координаты стеллажа + относительные координаты)
     DF_PROD -       голобальная таблица со списком всех товаров
