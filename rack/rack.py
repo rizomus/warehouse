@@ -93,10 +93,10 @@ class Rack():
         self.pallets[tier] = pallet
 
 
-    def get_pallet(self, tier):
+    def get_pallet(self, tier, agent=None):
         assert self.pallets[tier], 'no pallet'
         pallet = self.pallets[tier]
-        pallet.getting_from_rack()
+        pallet.getting_from_rack(agent=agent)
         self.pallets[tier] = None
         return pallet
 
