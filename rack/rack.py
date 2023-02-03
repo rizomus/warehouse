@@ -44,7 +44,7 @@ class Pallet():
                 r = rack.r
                 c = rack.c
                 vertex = f'{r}-{c}' 
-                self.DF_PROD.loc[i] = [prod, vertex, (tier), prod.sell_by_date]
+                self.DF_PROD.loc[i] = [prod, vertex, tier, prod.sell_by_date]
 
                 
     def getting_from_rack(self, agent=None):
@@ -58,7 +58,7 @@ class Pallet():
 
             for prod in self.products:
                 i = prod.index
-                self.DF_PROD.loc[i].Vertex = f'Оn going {agent}' 
+                self.DF_PROD.loc[i].Vertex = f'Оn going {self.agent}' 
 
                 
     def __repr__(self):
