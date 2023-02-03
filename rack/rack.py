@@ -58,7 +58,7 @@ class Pallet():
 
             for prod in self.products:
                 i = prod.index
-                self.DF_PROD.loc[i].Vertex = f'Оn going {self.agent}' 
+                self.DF_PROD.loc[i].Vertex = f'Оn going with {self.agent}' 
 
                 
     def __repr__(self):
