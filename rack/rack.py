@@ -16,13 +16,14 @@ class Pallet():
     rack -          ссылка на стеллаж (class Rack)
     tier -          номер яруса (0-4)
     x, y -          абсолютные координаты палеты (координаты стеллажа + относительные координаты)
-    DF_PROD -       голобальная таблица со списком всех товаров
+    DF_PROD -       таблица со списком всех товаров
 
     '''
-    def __init__(self, 	products=[], rack=None, tier=None):
+    def __init__(self, 	products=[], rack=None, tier=None, DF_PROD=None):
         self.products = products              
         self.rack = rack                  
         self.tier = tier
+        self.DF_PROD = DF_PROD
 
         if rack and tier:
             self.on_rack = True
@@ -32,7 +33,7 @@ class Pallet():
             self.on_rack = False
 
             
-    def putting_to_rack(self, rack, tier, DF_PROD):
+    def putting_to_rack(self, rack, tier):
             self.on_rack = True
             self.rack = rack
             self.tier = tier
@@ -43,20 +44,21 @@ class Pallet():
                 r = rack.r
                 c = rack.c
                 vertex = f'{r}-{c}' 
-                DF_PROD.loc[i] = [prod, vertex, (tier), prod.sell_by_date]
+                self.DF_PROD.loc[i] = [prod, vertex, (tier), prod.sell_by_date]
 
                 
-    def getting_from_rack(self, DF_PROD, agent=None):
+    def getting_from_rack(self, agent=None):
             vertex_index = f'{self.rack.r}-{self.rack.c}'
             self.on_rack = False
             self.rack = None
             self.tier = None
             self.x = None
-            self.y = None    
+            self.y = None
+            self.agent = agent
 
             for prod in self.products:
                 i = prod.index
-                DF_PROD.loc[i].Vertex = f'Оn going {agent}' 
+                self.DF_PROD.loc[i].Vertex = f'Оn going {agent}' 
 
                 
     def __repr__(self):
@@ -83,18 +85,18 @@ class Rack():
         self.pallets = np.full((5,), fill_value=None)
 
 
-    def put_pallet(self, pallet, tier, DF_PROD):                     # type(pallete) == __main__.Pallet
+    def put_pallet(self, pallet, tier):                     # type(pallete) == __main__.Pallet
         assert tier in [0,1,2,3,4], 'wrong tier number'
         assert not(self.pallets[tier]), 'the place is occupied'
         assert not(pallet.on_rack), 'pallet, you try to put, is already on rack'
-        pallet.putting_to_rack(self, tier, DF_PROD)
+        pallet.putting_to_rack(self, tier)
         self.pallets[tier] = pallet
 
 
-    def get_pallet(self, tier, DF_PROD):
+    def get_pallet(self, tier):
         assert self.pallets[tier], 'no pallet'
         pallet = self.pallets[tier]
-        pallet.getting_from_rack(DF_PROD)
+        pallet.getting_from_rack()
         self.pallets[tier] = None
         return pallet
 
