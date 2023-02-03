@@ -1,8 +1,4 @@
 import numpy as np
-import pandas as pd
-
-cols2 = ['Article', 'Vertex', 'Pallet_index', 'Sell_by_date']   # Products dataframe 
-DF_PROD = pd.DataFrame(columns=cols2) 
     
 class Product():
     def __init__(self, 	article, sell_by_date=None, vertex_index=None, place=None):
