@@ -89,14 +89,14 @@ class Rack():
         assert tier in [0,1,2,3,4], 'wrong tier number'
         assert not(self.pallets[tier]), 'the place is occupied'
         assert not(pallet.on_rack), 'pallet, you try to put, is already on rack'
-        pallet.putting_to_rack(self, tier)
+        pallet.putting_to_rack(self, tier, DF_PROD)
         self.pallets[tier] = pallet
 
 
     def get_pallet(self, tier, DF_PROD):
         assert self.pallets[tier], 'no pallet'
         pallet = self.pallets[tier]
-        pallet.getting_from_rack()
+        pallet.getting_from_rack(DF_PROD)
         self.pallets[tier] = None
         return pallet
 
