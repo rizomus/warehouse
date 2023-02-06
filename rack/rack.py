@@ -85,7 +85,7 @@ class Rack():
         self.pallets = np.full((5,), fill_value=None)
 
 
-    def put_pallet(self, pallet, tier):                     # type(pallete) == __main__.Pallet
+    def take_pallet(self, pallet, tier):                     # type(pallete) == __main__.Pallet
         assert tier in [0,1,2,3,4], 'wrong tier number'
         assert not(self.pallets[tier]), 'the place is occupied'
         assert not(pallet.on_rack), 'pallet, you try to put, is already on rack'
@@ -93,7 +93,7 @@ class Rack():
         self.pallets[tier] = pallet
 
 
-    def get_pallet(self, tier, agent=None):
+    def give_pallet(self, tier, agent=None):
         assert self.pallets[tier], 'no pallet'
         pallet = self.pallets[tier]
         pallet.getting_from_rack(agent=agent)
@@ -112,14 +112,14 @@ class Temp_rack():
         self.num = n
         self.pallet = None
 
-    def put_pallet(self, pallet):
+    def take_pallet (self, pallet):
         if self.pallet:
             print(f'{self} already has {self.pallet}')
             ERRORS.loc[len(ERRORS)] = [f'{self} already has {self.pallet}', '']
         else:
             self.pallet = pallet
 
-    def get_pallet(self):
+    def give_pallet(self):
         if self.pallet:
             pallet = self.pallet
             pallet.getting_from_rack()
