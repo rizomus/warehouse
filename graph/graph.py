@@ -24,6 +24,7 @@ class Edge():                               # Ребро графа
         self.v = v
         self.weight = weight
         self._weight = weight
+        self.orientation = None
 
     def reversed(self):
         return Edge(self.v, self.u, self.weight)
