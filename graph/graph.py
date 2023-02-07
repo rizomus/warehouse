@@ -28,20 +28,6 @@ class Edge():                               # Ребро графа
     def reversed(self):
         return Edge(self.v, self.u, self.weight)
 
-    def orientation(self):
-        v = self.v
-        u = self.u 
-
-        if u[:4] == 'temp':
-            return 'o'
-
-        if u[:2] == v[:2]:
-            return 'h'
-        elif u[-2] == v[-2]:
-            return 'v'
-        else:
-            return 'h'
-
     def restore_weight(self):
         self.weight = self._weight
 
