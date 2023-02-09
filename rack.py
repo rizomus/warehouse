@@ -131,3 +131,40 @@ class Temp_rack():
 
     def __repr__(self):
         return f'Tamp Rack {self.column}-{self.num}'
+
+    
+    
+    
+    
+def put_product_to_rack(products, sell_by_dates, rack_index, pallet_tier, DF_PROD, DF_RACK):
+    '''
+    Помещает товар на стеллаж
+    
+    '''
+    if type(products) != list:
+        products = [products]
+    if type(sell_by_dates) != list:
+        sell_by_dates = [sell_by_dates]
+
+    prod_list = [Product(p,s) for p,s in zip(products, sell_by_dates)]
+
+    r, c = rack_index.split('-')
+    c = int(c)
+    rack = DF_RACK[r][c]
+
+    if type(rack)==float:
+        # print(f'No rack in {rack_index}')
+        return
+        
+    pallet = Pallet(prod_list, DF_PROD=DF_PROD)
+
+    if DF_PROD.last_valid_index() is None:
+        i = 0
+    else:
+        i = DF_PROD.last_valid_index() + 1
+    
+    for prod in prod_list:
+        prod.index = i
+        i += 1
+
+    rack.take_pallet(pallet, tier=pallet_tier)
