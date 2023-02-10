@@ -11,21 +11,25 @@ import joblib
 from IPython.display import clear_output
 SECONDS_IN_FRAME = 1
 
-with open('warehouse/graph.gr', 'rb') as f:
+with open('/warehouse/graph.gr', 'rb') as f:
     GRAPH = joblib.load(f)
+with open('/warehouse/DF_RACK.pd', 'rb') as f:
+    DF_RACK = joblib.load(f)                                        # Все стеллажи
+with open('/content/warehouse/empty_canvas.np', 'rb') as f:
+    empty_canvas = joblib.load(f)                                   # Карта склада
 
-
+    
 # Создать необходимое количество агентов
 
 
 icon = np.full((16, 16, 3), fill_value=(np.array([0, 0, 225], dtype='int16')))
-agent_1 = Moving_agent('Petrovich', vertex_key='G-10', speed=SPEED, graph=GRAPH, icon=icon, sec_in_frame=SECONDS_IN_FRAME)
+agent_1 = Moving_agent('Petrovich', vertex_key='G-10', speed=1, graph=GRAPH, icon=icon, sec_in_frame=SECONDS_IN_FRAME)
 
 icon = np.full((16, 16, 3), fill_value=(np.array([255, 0, 0])), dtype='int16')
-agent_2 = Moving_agent('Michalych', vertex_key='H-15', speed=SPEED, graph=GRAPH, icon=icon, sec_in_frame=SECONDS_IN_FRAME)
+agent_2 = Moving_agent('Michalych', vertex_key='H-15', speed=1, graph=GRAPH, icon=icon, sec_in_frame=SECONDS_IN_FRAME)
 
 icon = np.full((16, 16, 3), fill_value=(np.array([0, 255, 0])), dtype='int16')
-agent_3 = Moving_agent('Kovalsky', vertex_key='M-89', speed=SPEED, graph=GRAPH, icon=icon, sec_in_frame=SECONDS_IN_FRAME)
+agent_3 = Moving_agent('Kovalsky', vertex_key='M-89', speed=1, graph=GRAPH, icon=icon, sec_in_frame=SECONDS_IN_FRAME)
 
 AGENTS = [agent_1, agent_2, agent_3]
 
@@ -47,7 +51,7 @@ for i in range(1000):
     vertex = 'A-23'             # Уникальный индекс стеллажа (в соответствии с GRAPH.vertex_dict)
     prod = 'Some_product'             # 'Milk'
     date = 'Sell_by_date'             # '01.01.23'
-    tier = 1
+    tier = 1                          # номер яруса стеллажа
     put_product_to_rack(prod, date, vertex, tier, DF_PROD, DF_RACK)
 
     
@@ -123,10 +127,7 @@ for sec in range(0, 60*60*8, SECONDS_IN_FRAME):
             reward -= 0.1                       # Пока фура не загружена, начисляется отрицательная награда за простой
 
     text = f'Reward: {reward:.1f}'
-    render([*trucks, *AGENTS], text=text)
+    render([*trucks, *AGENTS], text=textб empty_canvas)
 
-    print()
-    if len(ERRORS) != 0:
-        print(ERRORS)
     print(sec // 3600,'h,', (sec - (sec//3600)*3600)//60, 'min')
     clear_output(wait=True)
