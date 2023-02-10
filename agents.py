@@ -6,6 +6,7 @@ from copy import deepcopy
 from sklearn.neighbors import KDTree
 from sortedcontainers import SortedList
 from warehouse.graph import Vertex, Edge, Node, PriorityQueue
+from google.colab.patches import cv2_imshow
 
 class Point():
 
@@ -412,4 +413,4 @@ def render(agents, empty_canvas, text=None, return_img=False, PIXELS_IN_METER=10
         canvas = cv2.putText(canvas, text, (140*PIXELS_IN_METER , 6*PIXELS_IN_METER), cv2.FONT_HERSHEY_DUPLEX, 1, [50,50,50],2,)
     if return_img:
         return canvas
-    cv2_imshow(canvas)
+    cv2_imshow(canvas)      # use cv2.imshow() instead colab patch
