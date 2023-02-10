@@ -391,7 +391,7 @@ class Moving_agent(Point):
     
     
     
-  def render(agents=[], text=None, return_img=False):
+def render(agents=[], text=None, return_img=False):
     canvas = empty_canvas.copy()
     for agent in agents:
         agent_shape = agent.icon.shape
