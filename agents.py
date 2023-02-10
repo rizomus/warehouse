@@ -15,7 +15,7 @@ class Point():
         self.name = name
         self.speed = speed
         self.step_length = speed * sec_in_frame
-        self.graph = GRAPH
+        self.graph = graph
         self.x = x
         self.y = y
         self.vertex = vertex    # type == str
@@ -124,7 +124,7 @@ class Moving_agent(Point):
         ALL_Y = set()
         self.ALL_XY = []
 
-        for value in GRAPH.vertex_dict.values():
+        for value in self.graph.vertex_dict.values():
             ALL_X.add(value.x)
             ALL_Y.add(value.y)
             self.ALL_XY.append([value.x, value.y])
@@ -134,7 +134,7 @@ class Moving_agent(Point):
 
         self.df_XY = pd.DataFrame(columns=['X', *ALL_X], index=['Y', *ALL_Y])
 
-        for key, value in GRAPH.vertex_dict.items():
+        for key, value in self.graph.vertex_dict.items():
             self.df_XY[value.x][value.y] = key
 
 
