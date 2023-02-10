@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import cv2
+import joblib
 from copy import deepcopy
 from sklearn.neighbors import KDTree
 from sortedcontainers import SortedList
@@ -397,6 +398,8 @@ class Moving_agent(Point):
 
     
     
+with open('/warehouse/empty_canvas.np', 'rb') as f:
+    empty_canvas = joblib.load(f)
     
 def render(agents=[], text=None, return_img=False):
     canvas = empty_canvas.copy()
