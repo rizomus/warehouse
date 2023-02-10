@@ -91,8 +91,8 @@ class Point():
 
 
 class Truck(Point):
-    def __init__(self, name, vertex_key, speed, graph, x=None, y=None, icon=None, product_list=[]):
-        Point.__init__(self, name, vertex_key, speed, graph, x, y, icon)
+    def __init__(self, name, vertex_key, speed, graph, x=None, y=None, icon=None, product_list=[], sec_in_frame=1):
+        Point.__init__(self, name, vertex_key, speed, graph, x, y, icon, sec_in_frame)
         self.product_list = product_list
         self.pallets = []
         self.icon_empty = icon
@@ -114,8 +114,8 @@ class Truck(Point):
 
 class Moving_agent(Point):
     
-    def __init__(self, name, vertex_key, speed, graph, x=None, y=None, icon=None):
-        Point.__init__(self, name, vertex_key, speed, graph, x, y, icon)
+    def __init__(self, name, vertex_key, speed, graph, x=None, y=None, icon=None, sec_in_frame=1):
+        Point.__init__(self, name, vertex_key, speed, graph, x, y, icon, sec_in_frame)
         self.icon_empty = self.icon.copy()
         self.icon_full = cv2.rectangle(self.icon, (self.icon_h//4,self.icon_w//4), (int(self.icon_h*0.75), int(self.icon_w*0.7)), (0,255,255), -1)
         self.icon = self.icon_empty.copy()
