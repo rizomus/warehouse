@@ -9,8 +9,7 @@ from warehouse.graph import Vertex, Edge, Node, PriorityQueue
 
 class Point():
 
-    def __init__(self, name, vertex, speed, graph, x=None, y=None, icon=None, 
-                 _in_frame=1):
+    def __init__(self, name, vertex, speed, graph, x=None, y=None, icon=None, sec_in_frame=1):
         if vertex:
             x = graph.vertex_dict[vertex].x
             y = graph.vertex_dict[vertex].y
