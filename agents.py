@@ -397,11 +397,8 @@ class Moving_agent(Point):
         return self.name
 
     
-    
-with open('empty_canvas.np', 'rb') as f:
-    empty_canvas = joblib.load(f)
-    
-def render(agents=[], text=None, return_img=False):
+
+def render(agents=[], empty_canvas, text=None, return_img=False):
     canvas = empty_canvas.copy()
     for agent in agents:
         agent_shape = agent.icon.shape
