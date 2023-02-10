@@ -387,3 +387,20 @@ class Moving_agent(Point):
 
     def __repr__(self):
         return self.name
+
+    
+    
+    
+  def render(agents=[], text=None, return_img=False):
+    canvas = empty_canvas.copy()
+    for agent in agents:
+        agent_shape = agent.icon.shape
+        x, y = int(agent.x * PIXELS_IN_METER), int(agent.y * PIXELS_IN_METER)
+        x = max(agent_shape[1]//2, x)
+        y = max(agent_shape[0]//2, y)
+        canvas[y - agent_shape[0]//2 : y + agent_shape[0]//2, x - agent_shape[1]//2 : x + agent_shape[1]//2] = agent.icon
+    if text:
+        canvas = cv2.putText(canvas, text, (140*P , 6*P), cv2.FONT_HERSHEY_DUPLEX, 1, [50,50,50],2,)
+    if return_img:
+        return canvas
+    cv2_imshow(canvas)
