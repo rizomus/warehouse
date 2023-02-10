@@ -407,7 +407,7 @@ def render(agents, empty_canvas, text=None, return_img=False, PIXELS_IN_METER=10
         y = max(agent_shape[0]//2, y)
         canvas[y - agent_shape[0]//2 : y + agent_shape[0]//2, x - agent_shape[1]//2 : x + agent_shape[1]//2] = agent.icon
     if text:
-        canvas = cv2.putText(canvas, text, (140*P , 6*P), cv2.FONT_HERSHEY_DUPLEX, 1, [50,50,50],2,)
+        canvas = cv2.putText(canvas, text, (140*PIXELS_IN_METER , 6*PIXELS_IN_METER), cv2.FONT_HERSHEY_DUPLEX, 1, [50,50,50],2,)
     if return_img:
         return canvas
     cv2_imshow(canvas)
