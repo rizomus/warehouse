@@ -3,9 +3,10 @@
 
 '''
 
-from  warehouse.rack import put_product_to_rack
-from  warehouse.agents import Moving_agent, Truck
+from  warehouse.rack import Rack, Pallet, Product, put_product_to_rack
+from  warehouse.agents import Moving_agent, Truck, render
 import numpy as np
+import cv2
 import joblib
 from IPython.display import clear_output
 SECONDS_IN_FRAME = 1
@@ -79,6 +80,7 @@ for sec in range(0, 60*60*8, SECONDS_IN_FRAME):
 
     if truck_n < len(DF_TRUCK) and time >= DF_TRUCK['Arrival time'][truck_n]:       # Если подошло время прибытия очередной фуры
         truck_vertex = 'Dray-A1'                                                    # Площадка погрузки (в соответствии с GRAPH.vertex_dict)
+        truck_icon = cv2.imread('/warehouse/truck.jpg')
         truck = Truck('Truck', truck_vertex, speed=0, graph=GRAPH, icon=truck_icon)                                       # 
         truck.n = truck_n
         trucks.append(truck)                # Список фур ожидающих загрузки
