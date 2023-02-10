@@ -5,7 +5,7 @@ import joblib
 from copy import deepcopy
 from sklearn.neighbors import KDTree
 from sortedcontainers import SortedList
-from warehouse.graph import Vertex, Edge, PriorityQueue
+from warehouse.graph import Vertex, Edge, Node, PriorityQueue
 
 class Point():
 
