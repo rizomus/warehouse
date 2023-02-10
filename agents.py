@@ -9,13 +9,15 @@ from warehouse.graph import Vertex, Edge, Node, PriorityQueue
 
 class Point():
 
-    def __init__(self, name, vertex, speed, graph, x=None, y=None, icon=None, sec_in_frame=1):
+    def __init__(self, name, vertex, speed, graph, x=None, y=None, icon=None, 
+                 _in_frame=1):
         if vertex:
             x = graph.vertex_dict[vertex].x
             y = graph.vertex_dict[vertex].y
 
         self.name = name
         self.speed = speed
+        self.sec_in_frame = sec_in_frame
         self.step_length = speed * sec_in_frame
         self.graph = graph
         self.x = x
@@ -347,11 +349,11 @@ class Moving_agent(Point):
             if self.doing == 'go':
                 self.doing = 'MOVING PAUSE: ' + doing
                 self.moving_pause = True
-                self.timer = time // SECONDS_IN_FRAME
+                self.timer = time // self.sec_in_frame
                 self.set_icon_timer()
             else: 
                 self.doing = doing
-            self.timer = time // SECONDS_IN_FRAME
+            self.timer = time // self.sec_in_frame
             self.set_icon_timer()
 
 
