@@ -1,13 +1,20 @@
+import numpy as np
+import pandas as pd
+import cv2
+from copy import deepcopy
+from sklearn.neighbors import KDTree
+from sortedcontainers import SortedList
+
 class Point():
 
-    def __init__(self, name, vertex, speed, graph, x=None, y=None, icon=None):
+    def __init__(self, name, vertex, speed, graph, x=None, y=None, icon=None, sec_in_frame=1):
         if vertex:
             x = graph.vertex_dict[vertex].x
             y = graph.vertex_dict[vertex].y
 
         self.name = name
         self.speed = speed
-        self.step_length = speed * SECONDS_IN_FRAME
+        self.step_length = speed * sec_in_frame
         self.graph = GRAPH
         self.x = x
         self.y = y
