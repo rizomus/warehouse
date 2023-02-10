@@ -131,3 +131,6 @@ for sec in range(0, 60*60*8, SECONDS_IN_FRAME):
 
     print(sec // 3600,'h,', (sec - (sec//3600)*3600)//60, 'min')
     clear_output(wait=True)
+
+    
+  #  Colab notebook: https://colab.research.google.com/drive/1eGEGPWxpf3DcxS5fMgs4zCBhaDRXkWuK?usp=sharing
