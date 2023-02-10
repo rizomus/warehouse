@@ -41,6 +41,7 @@ class Point():
         self.doing = None
         self.timer = 0
         self.moving_pause = False
+        self.ERRORS = pd.DataFrame(columns=['Error', 'Info'])
 
 
     def take_pallet(self, source=None, pallet=None, *args):
@@ -51,7 +52,7 @@ class Point():
             self.icon = self.icon_full.copy()
         else:
             print(f'{self.name} already has a {self.pallet}')
-            ERRORS.loc[len(ERRORS)] = [f'{self.name} already has a {self.pallet}', f'vertex = {self.vertex}']
+            self.ERRORS.loc[len(self.ERRORS)] = [f'{self.name} already has a {self.pallet}', f'vertex = {self.vertex}']
 
 
     def give_pallet(self, receiver=None, *args):
@@ -66,7 +67,7 @@ class Point():
                 return pal
         else:
             print(f'{self.name} has no pallet')
-            ERRORS.loc[len(ERRORS)] = [f'{self.name} has no pallet', f'vertex = {self.vertex}']
+            self.ERRORS.loc[len(self.ERRORS)] = [f'{self.name} has no pallet', f'vertex = {self.vertex}']
 
 
     def add_task(self, task, *args):
@@ -371,7 +372,7 @@ class Moving_agent(Point):
                 self.move_across_path()
             else:
                 print(f'{self.name}: No path')
-                ERRORS.loc[len(ERRORS)] = [f'{self.name} No path', 'continue method']
+                self.ERRORS.loc[len(self.ERRORS)] = [f'{self.name} No path', 'continue method']
                 self.doing = None
 
         elif self.doing:
