@@ -398,7 +398,7 @@ class Moving_agent(Point):
 
     
     
-with open('/warehouse/empty_canvas.np', 'rb') as f:
+with open('empty_canvas.np', 'rb') as f:
     empty_canvas = joblib.load(f)
     
 def render(agents=[], text=None, return_img=False):
