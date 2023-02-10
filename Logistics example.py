@@ -5,10 +5,13 @@
 
 from  warehouse.rack import put_product_to_rack
 from  warehouse.agents import Moving_agent, Truck
-from  warehouse.graph import GRAPH
 import numpy as np
+import joblib
 from IPython.display import clear_output
 SECONDS_IN_FRAME = 1
+
+with open('warehouse/graph.gr', 'rb') as f:
+    GRAPH = joblib.load(f)
 
 
 # Создать необходимое количество агентов
